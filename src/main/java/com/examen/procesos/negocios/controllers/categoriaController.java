@@ -28,7 +28,7 @@ public class categoriaController {
 
     }
     @PostMapping("/categoria")
-    public ResponseEntity crearProducto(@RequestBody Categoria categoria){
+    public ResponseEntity crearCategoria(@RequestBody Categoria categoria){
         try {
             categoriaRepository.save(categoria);
             return  new ResponseEntity(categoria, HttpStatus.CREATED);
