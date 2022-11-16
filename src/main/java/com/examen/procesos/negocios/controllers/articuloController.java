@@ -17,6 +17,7 @@ public class articuloController {
     @Autowired
     private ArticuloRepository articuloRepository;
     private CategoriaRepository categoriaRepository;
+    @Autowired
     private ArticuloService articuloService;
 
     @GetMapping("/articulos")
