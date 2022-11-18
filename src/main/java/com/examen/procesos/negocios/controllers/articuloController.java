@@ -5,6 +5,7 @@ import com.examen.procesos.negocios.models.Categoria;
 import com.examen.procesos.negocios.repository.ArticuloRepository;
 import com.examen.procesos.negocios.repository.CategoriaRepository;
 import com.examen.procesos.negocios.services.ArticuloService;
+import com.examen.procesos.negocios.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,28 +25,76 @@ public class articuloController {
     private CategoriaRepository categoriaRepository;
     @Autowired
     private ArticuloService articuloService;
-
+    @Autowired
+    private JWTUtil jwtUtil;
     @GetMapping("/articulos")
-    public ResponseEntity listarArticulos() {
-        return articuloService.allArticles();
+    public ResponseEntity listarArticulos(@RequestHeader(value="Authorization") String token) {
+
+        try{
+            if(jwtUtil.getKey(token) != null) {
+                return articuloService.allArticles();
+            }
+            return ResponseEntity.badRequest().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+        }
+
+
     }
 
     @GetMapping("/articulo/codigo/{codigo}")
-    public ResponseEntity getArticulo(@PathVariable String codigo) {
-        return articuloService.getArticleFindBycodige(codigo);
+    public ResponseEntity getArticulo(@PathVariable String codigo,@RequestHeader(value="Authorization") String token) {
+        try{
+            if(jwtUtil.getKey(token) != null) {
+                return articuloService.getArticleFindBycodige(codigo);
+            }
+            return ResponseEntity.badRequest().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+        }
+
+
 
     }
     @PostMapping("/articulo")
-    public ResponseEntity crearArticulo(@RequestBody Articulo articulo){
-        return articuloService.createArticle(articulo);
+    public ResponseEntity crearArticulo(@RequestBody Articulo articulo,@RequestHeader(value="Authorization") String token){
+
+        try{
+            if(jwtUtil.getKey(token) != null) {
+                return articuloService.createArticle(articulo);
+            }
+            return ResponseEntity.badRequest().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+        }
+
     }
     @DeleteMapping("/articulo/codigo/{codigo}")
-    public ResponseEntity eliminarArticulo(@PathVariable String codigo){
-        return articuloService.deleteArticle(codigo);
+    public ResponseEntity eliminarArticulo(@PathVariable String codigo,@RequestHeader(value="Authorization") String token){
+        try{
+            if(jwtUtil.getKey(token) != null) {
+                return articuloService.deleteArticle(codigo);
+            }
+            return ResponseEntity.badRequest().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+        }
+
+
     }
     @PutMapping("/articulo/{codigo}")
-    public ResponseEntity editarArticulo(@PathVariable String codigo,@RequestBody Articulo articulo){
-        return articuloService.editArticle(codigo,articulo);
+    public ResponseEntity editarArticulo(@PathVariable String codigo,@RequestBody Articulo articulo,@RequestHeader(value="Authorization") String token){
+        try{
+            if(jwtUtil.getKey(token) != null) {
+                return articuloService.editArticle(codigo,articulo);
+            }
+            return ResponseEntity.badRequest().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+        }
+
+
+
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
