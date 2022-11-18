@@ -3,6 +3,7 @@ package com.examen.procesos.negocios.controllers;
 import com.examen.procesos.negocios.models.Categoria;
 import com.examen.procesos.negocios.repository.CategoriaRepository;
 import com.examen.procesos.negocios.services.CategoriaService;
+import com.examen.procesos.negocios.utils.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,31 @@ public class categoriaController {
 
     @Autowired
     private CategoriaService categoriaService;
-
+    @Autowired
+    private JWTUtil jwtUtil;
     @GetMapping("/categorias")
-    public ResponseEntity listarCategorias() {
-        return categoriaService.allCategory();
+    public ResponseEntity listarCategorias(@RequestHeader(value="Authorization") String token) {
+        try{
+            if(jwtUtil.getKey(token) != null) {
+                return categoriaService.allCategory();
+            }
+            return ResponseEntity.badRequest().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+        }
+
     }
     @PostMapping("/categoria")
-    public ResponseEntity crearCategoria(@RequestBody Categoria categoria){
-        return categoriaService.createCategory(categoria);
+    public ResponseEntity crearCategoria(@RequestBody Categoria categoria,@RequestHeader(value="Authorization") String token){
+        try{
+            if(jwtUtil.getKey(token) != null) {
+                return categoriaService.createCategory(categoria);
+            }
+            return ResponseEntity.badRequest().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+        }
+
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
