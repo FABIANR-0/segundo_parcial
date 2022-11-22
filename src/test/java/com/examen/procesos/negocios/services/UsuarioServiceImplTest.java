@@ -96,5 +96,5 @@ class UsuarioServiceImplTest {
         //Then
         Assertions.assertEquals(null, usuario1);
 
- }
+    }
 }
