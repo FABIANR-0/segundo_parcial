@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ public class categoriaController {
     }
     @PostMapping("/categoria")
     public ResponseEntity crearCategoria(@RequestBody Categoria categoria,@RequestHeader(value="Authorization") String token){
+
         try{
             if(jwtUtil.getKey(token) != null) {
                 return categoriaService.createCategory(categoria);
@@ -44,7 +46,6 @@ public class categoriaController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
         }
-
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
