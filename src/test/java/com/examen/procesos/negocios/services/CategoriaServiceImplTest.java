@@ -42,10 +42,10 @@ class CategoriaServiceImplTest {
         when(categoriaRepository.findAll()).thenReturn(List.of(categoria));
 
 
-        ResponseEntity<List<Categoria>> usuario1 = categoriaServiceImpl.allCategory();
+        ResponseEntity<List<Categoria>> categoria1 = categoriaServiceImpl.allCategory();
 
         //then
-        Assertions.assertNotNull(usuario1);
+        Assertions.assertNotNull(categoria1);
     }
     @Test
     void whenNoEncuentraNingunaCategoria() {
@@ -54,10 +54,10 @@ class CategoriaServiceImplTest {
         //When
         when(categoriaRepository.findAll()).thenReturn(Collections.emptyList());
 
-        List<Categoria> usuario1 = categoriaServiceImpl.allCategory().getBody();
+        List<Categoria> categoria1 = categoriaServiceImpl.allCategory().getBody();
 
         //Then
-        Assertions.assertEquals(null, usuario1);
+        Assertions.assertEquals(null, categoria1);
 
     }
 
