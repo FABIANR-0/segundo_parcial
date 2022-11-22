@@ -134,4 +134,76 @@ class UsuarioServiceImplTest {
         Assertions.assertEquals(null, usuario1);
 
     }
+    @Test
+    void seDebeEncontrarLosUsuariosPorNombresyApellidos() {
+        //Given
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setNombre("pepe");
+        usuario.setApellidos("Rios");
+        usuario.setFechaNacimiento(new Date(2004, 7, 14));
+        usuario.setCorreo("pepe@gmail.com");
+        usuario.setPassword("1234");
+        usuario.setDireccion("kdx.010-310");
+        usuario.setDocumento("1064836389");
+        usuario.setTelefono("3144454761");
+
+        //when
+        when(usuarioRepository.findAllByNombreAndApellidos("pepe", "rios")).thenReturn(List.of(usuario));
+
+
+        ResponseEntity<List<Usuario>> usuario1 = usuarioServiceImpl.allUsersByNameAndLastName("pepe", "rios");
+
+        //then
+        Assertions.assertNotNull(usuario1);
+    }
+    @Test
+    void whenNoEncuentraUsuariosPorNombresyApellidos() {
+        Usuario usuario = null;
+
+        //When
+        when(usuarioRepository.findAllByNombreAndApellidos("pepe", "rios")).thenReturn(Collections.emptyList());
+
+        List<Usuario> usuario1 = usuarioServiceImpl.allUsersByNameAndLastName("pepe", "rios").getBody();
+
+        //Then
+        Assertions.assertEquals(null, usuario1);
+
+    }
+    @Test
+    void seDebeListarLosUsuarios() {
+        //Given
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setNombre("pepe");
+        usuario.setApellidos("Rios");
+        usuario.setFechaNacimiento(new Date(2004, 7, 14));
+        usuario.setCorreo("pepe@gmail.com");
+        usuario.setPassword("1234");
+        usuario.setDireccion("kdx.010-310");
+        usuario.setDocumento("1064836389");
+        usuario.setTelefono("3144454761");
+
+        //when
+        when(usuarioRepository.findAll()).thenReturn(List.of(usuario));
+
+
+        ResponseEntity<List<Usuario>> usuario1 = usuarioServiceImpl.allUsers();
+
+        //then
+        Assertions.assertNotNull(usuario1);
+    }
+    @Test
+    void whenNoEncuentraNingunUsuario() {
+        Usuario usuario = null;
+
+        //When
+        when(usuarioRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<Usuario> usuario1 = usuarioServiceImpl.allUsers().getBody();
+
+        //Then
+        Assertions.assertEquals(null, usuario1);
+
+    }
 }
