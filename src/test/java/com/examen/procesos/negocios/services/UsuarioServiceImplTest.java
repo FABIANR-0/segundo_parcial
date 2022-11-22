@@ -24,9 +24,9 @@ class UsuarioServiceImplTest {
     @InjectMocks
     private UsuarioServiceImpl usuarioServiceImpl;
     @InjectMocks
-    Usuario usuario;
+    private Usuario usuario;
     @Mock
-    UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Test
     void seDebeEncontrarUnUsuarioPorId() {
