@@ -1,5 +1,6 @@
 package com.examen.procesos.negocios.services;
 
+import com.examen.procesos.negocios.Data.FactoryUsuarioTestData;
 import com.examen.procesos.negocios.models.Usuario;
 import com.examen.procesos.negocios.repository.UsuarioRepository;
 import org.junit.jupiter.api.Assertions;
@@ -11,11 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -29,18 +31,23 @@ class UsuarioServiceImplTest {
     private UsuarioRepository usuarioRepository;
 
     @Test
+    void seDebeGuardarUnUsuario() {
+        //Given
+        Usuario usuario = FactoryUsuarioTestData.mockUsuario();
+
+        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.of(usuario));
+        given(usuarioRepository.save(usuario)).willReturn(usuario);
+        //When
+
+        ResponseEntity<Usuario> userSave = usuarioServiceImpl.createUser(usuario);
+
+        //Then
+        Assertions.assertNotNull(userSave);
+    }
+    @Test
     void seDebeEncontrarUnUsuarioPorId() {
         //Given
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setNombre("pepe");
-        usuario.setApellidos("Rios");
-        usuario.setFechaNacimiento(new Date(2004, 7, 14));
-        usuario.setCorreo("pepe@gmail.com");
-        usuario.setPassword("1234");
-        usuario.setDireccion("kdx.010-310");
-        usuario.setDocumento("1064836389");
-        usuario.setTelefono("3144454761");
+        Usuario usuario = FactoryUsuarioTestData.mockUsuario();
         //when
         when(usuarioRepository.findById(anyLong())).thenReturn(Optional.of(usuario));
         ResponseEntity<Usuario> usuario1 = usuarioServiceImpl.getUserById(anyLong());
@@ -64,22 +71,13 @@ class UsuarioServiceImplTest {
     @Test
     void seDebeEncontrarLosUsuariosPorNombre() {
         //Given
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setNombre("pepe");
-        usuario.setApellidos("Rios");
-        usuario.setFechaNacimiento(new Date(2004, 7, 14));
-        usuario.setCorreo("pepe@gmail.com");
-        usuario.setPassword("1234");
-        usuario.setDireccion("kdx.010-310");
-        usuario.setDocumento("1064836389");
-        usuario.setTelefono("3144454761");
+        Usuario usuario = FactoryUsuarioTestData.mockUsuario();
 
         //when
-        when(usuarioRepository.findAllByNombre("pepe")).thenReturn(List.of(usuario));
+        when(usuarioRepository.findAllByNombre(anyString())).thenReturn(List.of(usuario));
 
 
-        ResponseEntity<List<Usuario>> usuario1 = usuarioServiceImpl.allUsersByName("pepe");
+        ResponseEntity<List<Usuario>> usuario1 = usuarioServiceImpl.allUsersByName(anyString());
 
         //then
         Assertions.assertNotNull(usuario1);
@@ -100,16 +98,7 @@ class UsuarioServiceImplTest {
     @Test
     void seDebeEncontrarLosUsuariosPorApellido() {
         //Given
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setNombre("pepe");
-        usuario.setApellidos("Rios");
-        usuario.setFechaNacimiento(new Date(2004, 7, 14));
-        usuario.setCorreo("pepe@gmail.com");
-        usuario.setPassword("1234");
-        usuario.setDireccion("kdx.010-310");
-        usuario.setDocumento("1064836389");
-        usuario.setTelefono("3144454761");
+        Usuario usuario = FactoryUsuarioTestData.mockUsuario();
 
         //when
         when(usuarioRepository.findAllByApellidos("rios")).thenReturn(List.of(usuario));
@@ -137,16 +126,7 @@ class UsuarioServiceImplTest {
     @Test
     void seDebeEncontrarLosUsuariosPorNombresyApellidos() {
         //Given
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setNombre("pepe");
-        usuario.setApellidos("Rios");
-        usuario.setFechaNacimiento(new Date(2004, 7, 14));
-        usuario.setCorreo("pepe@gmail.com");
-        usuario.setPassword("1234");
-        usuario.setDireccion("kdx.010-310");
-        usuario.setDocumento("1064836389");
-        usuario.setTelefono("3144454761");
+        Usuario usuario = FactoryUsuarioTestData.mockUsuario();
 
         //when
         when(usuarioRepository.findAllByNombreAndApellidos("pepe", "rios")).thenReturn(List.of(usuario));
@@ -173,16 +153,7 @@ class UsuarioServiceImplTest {
     @Test
     void seDebeListarLosUsuarios() {
         //Given
-        Usuario usuario = new Usuario();
-        usuario.setId(1L);
-        usuario.setNombre("pepe");
-        usuario.setApellidos("Rios");
-        usuario.setFechaNacimiento(new Date(2004, 7, 14));
-        usuario.setCorreo("pepe@gmail.com");
-        usuario.setPassword("1234");
-        usuario.setDireccion("kdx.010-310");
-        usuario.setDocumento("1064836389");
-        usuario.setTelefono("3144454761");
+        Usuario usuario = FactoryUsuarioTestData.mockUsuario();
 
         //when
         when(usuarioRepository.findAll()).thenReturn(List.of(usuario));
@@ -205,5 +176,33 @@ class UsuarioServiceImplTest {
         //Then
         Assertions.assertEquals(null, usuario1);
 
+    }
+    @Test
+    void seDebeActualizarUnArticulo() {
+        // Given
+        Usuario usuario = FactoryUsuarioTestData.mockUsuario();
+        Usuario usuarioAct = FactoryUsuarioTestData.mockUsuarioAct();
+        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.of(usuario));
+        given(usuarioRepository.save(usuarioAct)).willReturn(usuarioAct);
+
+        //when
+        ResponseEntity<Usuario> userSave = usuarioServiceImpl.editUser(usuario.getId(), usuarioAct);
+
+        //Then
+        Assertions.assertNotNull(userSave);
+    }
+    @Test
+    void seDebeEliminarUnUsuario() {
+        //Given
+        Usuario usuario = FactoryUsuarioTestData.mockUsuario();
+
+        given(usuarioRepository.findById(anyLong())).willReturn(null);
+
+        //when
+        usuarioRepository.deleteById(anyLong());
+        Optional<Usuario> userDelete = usuarioRepository.findById(anyLong());
+
+        //Then
+        assertThat(userDelete).isNull();
     }
 }

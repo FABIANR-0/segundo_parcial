@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -58,6 +59,30 @@ class ArticuloServiceImplTest {
 
         //then
         Assertions.assertNotNull(articulo1);
+    }
+    @Test
+    void createArticleTest() {
+        //Given
+        Articulo articulo = new Articulo();
+        Categoria categoria = new Categoria();
+        categoria.setId_ctg(1l);
+        categoria.setNombre("Aseo");
+        categoria.setDescripcion("articulos para el aseo");
+
+        articulo.setId(1L);
+        articulo.setCodigo("A01");
+        articulo.setNombre("Jabon");
+        articulo.setDescripcion("Jabon azul");
+        articulo.setFecha_registro(new Date(2004, 7, 14));
+        articulo.setCategoria(categoria);
+        given(articuloRepository.findByCodigo(articulo.getCodigo())).willReturn(Optional.of(articulo));
+        given(articuloRepository.save(articulo)).willReturn(articulo);
+        //When
+
+        ResponseEntity<Articulo> articuloGuardado = articuloServiceImpl.createArticle(articulo);
+
+        //Then
+        Assertions.assertNotNull(articuloGuardado);
     }
     @Test
     void whenNoEncuentraArticuloPorCodigo() {
