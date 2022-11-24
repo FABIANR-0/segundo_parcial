@@ -178,7 +178,7 @@ class UsuarioServiceImplTest {
 
     }
     @Test
-    void seDebeActualizarUnArticulo() {
+    void seDebeActualizarUnUsuario() {
         // Given
         Usuario usuario = FactoryUsuarioTestData.mockUsuario();
         Usuario usuarioAct = FactoryUsuarioTestData.mockUsuarioAct();

@@ -2,6 +2,7 @@ package com.examen.procesos.negocios.services;
 
 import com.examen.procesos.negocios.Data.FactoryArticuloTestData;
 import com.examen.procesos.negocios.Data.FactoryCategoriaTestData;
+import com.examen.procesos.negocios.Data.FactoryUsuarioTestData;
 import com.examen.procesos.negocios.models.Articulo;
 import com.examen.procesos.negocios.models.Categoria;
 import com.examen.procesos.negocios.models.Usuario;
@@ -20,8 +21,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
@@ -100,5 +103,32 @@ class ArticuloServiceImplTest {
         Assertions.assertEquals(null, articulo1);
 
     }
+    @Test
+    void seDebeActualizarUnArticulo() {
+        // Given
+        Articulo articulo = FactoryArticuloTestData.mockArticulo();
+        Articulo articuloAct = FactoryArticuloTestData.mockArticuloAct();
+        given(articuloRepository.findByCodigo(anyString())).willReturn(Optional.of(articulo));
+        given(articuloRepository.save(articuloAct)).willReturn(articuloAct);
 
+        //when
+        ResponseEntity<Articulo> articleSave = articuloServiceImpl.editArticle(articulo.getCodigo(), articuloAct);
+
+        //Then
+        Assertions.assertNotNull(articleSave);
+    }
+    @Test
+    void seDebeEliminarUnArticulo() {
+        //Given
+        Articulo articulo = FactoryArticuloTestData.mockArticulo();
+
+        given(articuloRepository.findByCodigo(anyString())).willReturn(null);
+
+        //when
+        articuloRepository.delete(articulo);
+        Optional<Articulo> articleDelete = articuloRepository.findByCodigo(anyString());
+
+        //Then
+        assertThat(articleDelete).isNull();
+    }
 }
