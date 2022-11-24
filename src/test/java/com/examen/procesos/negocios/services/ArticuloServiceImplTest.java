@@ -1,5 +1,7 @@
 package com.examen.procesos.negocios.services;
 
+import com.examen.procesos.negocios.Data.FactoryArticuloTestData;
+import com.examen.procesos.negocios.Data.FactoryCategoriaTestData;
 import com.examen.procesos.negocios.models.Articulo;
 import com.examen.procesos.negocios.models.Categoria;
 import com.examen.procesos.negocios.models.Usuario;
@@ -37,22 +39,7 @@ class ArticuloServiceImplTest {
     @Test
     void seDebeEncontrarUnArticuloPorCodigo() {
         //Given
-        Articulo articulo = new Articulo();
-        Categoria categoria = new Categoria();
-        categoria.setId_ctg(1l);
-        categoria.setNombre("Aseo");
-        categoria.setDescripcion("articulos para el aseo");
-
-        articulo.setId(1L);
-        articulo.setCodigo("A01");
-        articulo.setNombre("Jabon");
-        articulo.setDescripcion("Jabon azul");
-        articulo.setFecha_registro(new Date(2004, 7, 14));
-        articulo.setCategoria(categoria);
-
-        articulo.setStock(32);
-        articulo.setPrecio_compra(1.200);
-        articulo.setPrecio_venta(1.500);
+        Articulo articulo = FactoryArticuloTestData.mockArticulo();
         //when
         when(articuloRepository.findByCodigo("A01")).thenReturn(Optional.of(articulo));
         ResponseEntity<Articulo> articulo1 = articuloServiceImpl.getArticleFindBycodige("A01");
@@ -63,18 +50,7 @@ class ArticuloServiceImplTest {
     @Test
     void createArticleTest() {
         //Given
-        Articulo articulo = new Articulo();
-        Categoria categoria = new Categoria();
-        categoria.setId_ctg(1l);
-        categoria.setNombre("Aseo");
-        categoria.setDescripcion("articulos para el aseo");
-
-        articulo.setId(1L);
-        articulo.setCodigo("A01");
-        articulo.setNombre("Jabon");
-        articulo.setDescripcion("Jabon azul");
-        articulo.setFecha_registro(new Date(2004, 7, 14));
-        articulo.setCategoria(categoria);
+        Articulo articulo = FactoryArticuloTestData.mockArticulo();
         given(articuloRepository.findByCodigo(articulo.getCodigo())).willReturn(Optional.of(articulo));
         given(articuloRepository.save(articulo)).willReturn(articulo);
         //When
@@ -101,20 +77,7 @@ class ArticuloServiceImplTest {
     @Test
     void seDebeListarLosArticulos() {
         //Given
-        Articulo articulo = new Articulo();
-        Categoria categoria = new Categoria();
-        categoria.setId_ctg(1l);
-        categoria.setNombre("Aseo");
-        categoria.setDescripcion("articulos para el aseo");
-        articulo.setId(1L);
-        articulo.setCodigo("A01");
-        articulo.setNombre("Jabon");
-        articulo.setDescripcion("Jabon azul");
-        articulo.setFecha_registro(new Date(2004, 7, 14));
-        articulo.setCategoria(categoria);
-        articulo.setStock(32);
-        articulo.setPrecio_compra(1.200);
-        articulo.setPrecio_venta(1.500);
+        Articulo articulo = FactoryArticuloTestData.mockArticulo();
         //when
         when(articuloRepository.findAll()).thenReturn(List.of(articulo));
 

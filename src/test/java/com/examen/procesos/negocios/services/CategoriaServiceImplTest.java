@@ -33,10 +33,7 @@ class CategoriaServiceImplTest {
     @Test
     void seDebeListarLasCategorias() {
         //Given
-        Categoria categoria = new Categoria();
-        categoria.setId_ctg(1l);
-        categoria.setNombre("Aseo");
-        categoria.setDescripcion("articulos para el aseo");
+        Categoria categoria = FactoryCategoriaTestData.mockCategoria();
 
         //when
         when(categoriaRepository.findAll()).thenReturn(List.of(categoria));
@@ -66,7 +63,7 @@ class CategoriaServiceImplTest {
         //Given
         Categoria categoria = FactoryCategoriaTestData.mockCategoria();
 
-        given(categoriaRepository.findById(categoria.getId_ctg()).willReturn(Optional.of(categoria));
+       given(categoriaRepository.findById(anyLong())).willReturn(Optional.of(categoria));
         
         given(categoriaRepository.save(categoria)).willReturn(categoria);
         //When
