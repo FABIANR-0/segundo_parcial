@@ -1,5 +1,6 @@
 package com.examen.procesos.negocios.services;
 
+import com.examen.procesos.negocios.Data.FactoryCategoriaTestData;
 import com.examen.procesos.negocios.models.Categoria;
 import com.examen.procesos.negocios.repository.CategoriaRepository;
 import org.junit.jupiter.api.Assertions;
@@ -11,12 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -61,5 +61,20 @@ class CategoriaServiceImplTest {
 
     }
 
+    @Test
+    void seDebeGuardarUnaCategoria() {
+        //Given
+        Categoria categoria = FactoryCategoriaTestData.mockCategoria();
 
+        given(categoriaRepository.findById(categoria.getId_ctg()).willReturn(Optional.of(categoria));
+        
+        given(categoriaRepository.save(categoria)).willReturn(categoria);
+        //When
+
+        ResponseEntity<Categoria> categorySave = categoriaServiceImpl.createCategory(categoria);
+
+        //Then
+        Assertions.assertNotNull(categorySave);
+    }
+    
 }
