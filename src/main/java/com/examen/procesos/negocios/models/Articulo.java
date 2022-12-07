@@ -26,6 +26,8 @@ public class Articulo {
     private Date fecha_registro;
     @ManyToOne
     private Categoria categoria;
+    @ManyToOne
+    private Usuario usuario;
     @Column(nullable = false)
     private int stock;
     @Column(nullable = false,scale = 2)

@@ -13,6 +13,7 @@ public class FactoryArticuloTestData {
         articulo.setDescripcion("Jabon azul");
         articulo.setFecha_registro(new Date(2004, 7, 14));
         articulo.setCategoria(FactoryCategoriaTestData.mockCategoria());
+        articulo.setUsuario(FactoryUsuarioTestData.mockUsuario());
         articulo.setStock(32);
         articulo.setPrecio_compra(1.200);
         articulo.setPrecio_venta(1.500);
@@ -29,6 +30,7 @@ public class FactoryArticuloTestData {
         articulo.setDescripcion("otro");
         articulo.setFecha_registro(new Date(2004, 7, 14));
         articulo.setCategoria(FactoryCategoriaTestData.mockCategoria());
+        articulo.setUsuario(FactoryUsuarioTestData.mockUsuario());
         articulo.setStock(32);
         articulo.setPrecio_compra(1.200);
         articulo.setPrecio_venta(1.500);
