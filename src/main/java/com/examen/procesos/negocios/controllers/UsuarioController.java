@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.*;
-
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class UsuarioController {
 
