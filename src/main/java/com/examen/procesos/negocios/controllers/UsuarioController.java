@@ -76,6 +76,19 @@ public class UsuarioController {
         }
 
     }
+    @GetMapping(value = "/usuario/correo/{correo}")
+    public ResponseEntity getUsuarioId(@PathVariable String correo, @RequestHeader(value="Authorization") String token){
+
+        try{
+            if(jwtUtil.getKey(token) != null) {
+                return usuarioService.getUserByCorreo(correo);
+            }
+            return ResponseEntity.badRequest().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no valido");
+        }
+
+    }
     @GetMapping(value="/usuarios/apellidos/{apellidos}")
     public ResponseEntity listarPorapellidos(@PathVariable  String apellidos , @RequestHeader(value="Authorization") String token){
         try{

@@ -26,7 +26,6 @@ public class Articulo {
     private Date fecha_registro;
     @ManyToOne
     private Categoria categoria;
-
     @ManyToOne
     private Usuario usuario;
     @Column(nullable = false)
